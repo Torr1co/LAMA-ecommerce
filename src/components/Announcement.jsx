@@ -12,7 +12,7 @@ const Container = styled.div`
   font-weight: 500;
 `;
 const Announcement = () => {
-  return <Container>Super Deal! Free shopping over $50</Container>;
+  return <Container>Super Deal! Free shipping over $50</Container>;
 };
 
 export default Announcement;
