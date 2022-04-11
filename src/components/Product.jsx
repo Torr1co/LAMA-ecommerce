@@ -50,7 +50,7 @@ const Icon = styled.div`
   }
 `;
 
-const Info = styled.p`
+const Info = styled.div`
   opacity: 0;
   width: 100%;
   height: 100%;

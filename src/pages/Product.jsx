@@ -137,9 +137,11 @@ const Product = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        console.log(id);
         const res = await publicRequest.get("/products/find/" + id);
         setProduct(res.data);
+        setColor(product?.color[0]);
+        setSize(product?.size[0]);
+        console.log(product, color, size);
       } catch (err) {
         console.log(err);
       }
@@ -165,7 +167,7 @@ const Product = () => {
               {product.color?.map((c) => (
                 <FilterColor
                   color={c}
-                  onClick={(e) => setColor(e.target.value)}
+                  onChange={(e) => setColor(e.target.value)}
                   key={c}
                 />
               ))}
@@ -175,7 +177,7 @@ const Product = () => {
               <FilterSize>
                 {product.size?.map((s) => (
                   <FilterSizeOption
-                    onClick={(e) => setSize(e.target.value)}
+                    onChange={(e) => setSize(e.target.value)}
                     key={s}
                   >
                     {s}
