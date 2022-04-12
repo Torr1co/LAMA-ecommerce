@@ -139,9 +139,6 @@ const Product = () => {
       try {
         const res = await publicRequest.get("/products/find/" + id);
         setProduct(res.data);
-        setColor(product?.color[0]);
-        setSize(product?.size[0]);
-        console.log(product, color, size);
       } catch (err) {
         console.log(err);
       }
@@ -165,23 +162,19 @@ const Product = () => {
             <Filter>
               <FilterTitle>Color</FilterTitle>
               {product.color?.map((c) => (
-                <FilterColor
-                  color={c}
-                  onChange={(e) => setColor(e.target.value)}
-                  key={c}
-                />
+                <FilterColor color={c} onClick={() => setColor(c)} key={c} />
               ))}
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize>
+              <FilterSize
+                onChange={(e) => {
+                  setSize(e.target.size);
+                  console.log(size);
+                }}
+              >
                 {product.size?.map((s) => (
-                  <FilterSizeOption
-                    onChange={(e) => setSize(e.target.value)}
-                    key={s}
-                  >
-                    {s}
-                  </FilterSizeOption>
+                  <FilterSizeOption key={s}>{s}</FilterSizeOption>
                 ))}
               </FilterSize>
             </Filter>

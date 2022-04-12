@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
-import { Badge } from "@material-ui/core";
+import { Badge } from "@mui/material";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";

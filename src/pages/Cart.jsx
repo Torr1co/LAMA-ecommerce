@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import NavBar from "../components/NavBar";
@@ -6,9 +6,12 @@ import Footer from "../components/Footer.jsx";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
-import StripeChekout from "react-stripe-checkout";
+import StripeCheckout from "react-stripe-checkout";
+import { userRequest } from "../api/expressServer";
+import { useNavigate } from "react-router-dom";
 
-const KEY = process.env.REACT_APP_STRIPE_KEY;
+const STRIPE_KEY = process.env.REACT_APP_STRIPE_KEY;
+
 const Container = styled.div``;
 const Wrapper = styled.div`
   padding: 20px;
@@ -132,6 +135,29 @@ const Button = styled.button`
 `;
 const Cart = () => {
   const { cart } = useSelector((state) => state);
+  const navigate = useNavigate();
+  const [stripeToken, setStripeToken] = useState(null);
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const res = await userRequest.post("/stripe/payment", {
+          tokenId: stripeToken.id,
+          amount: cart.total * 100,
+        });
+
+        console.log(res.data);
+        navigate("/success");
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    stripeToken && makeRequest();
+  }, [stripeToken, navigate, cart.total]);
+
   return (
     <Container>
       <NavBar />
@@ -141,7 +167,7 @@ const Cart = () => {
         <Top>
           <TopButton>CONTINUE SHOPPING</TopButton>
           <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
+            <TopText>Shopping Bag({cart.products.length})</TopText>
             <TopText>Your WishList (0)</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
@@ -149,39 +175,36 @@ const Cart = () => {
         <Bottom>
           <Info>
             {cart.products.map((product, i) => (
-              <>
-                <Product key={i}>
-                  <ProductDetail>
-                    <Image src={product.img} />
-                    <Details>
-                      <ProductName>
-                        <b>Product: </b>
-                        {product.title}
-                      </ProductName>
-                      <ProductId>
-                        <b>ID: </b>
-                        {product._id}
-                      </ProductId>
-                      <ProductColor color={product.color} />
-                      <ProductSize>
-                        <b>Size: </b>
-                        {product.size}
-                      </ProductSize>
-                    </Details>
-                  </ProductDetail>
-                  <PriceDetail>
-                    <ProductAmountContainer>
-                      <Add />
-                      <ProductAmount>{product.quantity}</ProductAmount>
-                      <Remove />
-                    </ProductAmountContainer>
-                    <ProductPrice>
-                      ${product.price * product.quantity}
-                    </ProductPrice>
-                  </PriceDetail>
-                </Product>
-                <Hr />
-              </>
+              <Product key={i}>
+                <ProductDetail>
+                  <Image src={product.img} />
+                  <Details>
+                    <ProductName>
+                      <b>Product: </b>
+                      {product.title}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID: </b>
+                      {product._id}
+                    </ProductId>
+                    <ProductColor color={product.color} />
+                    <ProductSize>
+                      <b>Size: </b>
+                      {product.size}
+                    </ProductSize>
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountContainer>
+                    <Add />
+                    <ProductAmount>{product.quantity}</ProductAmount>
+                    <Remove />
+                  </ProductAmountContainer>
+                  <ProductPrice>
+                    ${product.price * product.quantity}
+                  </ProductPrice>
+                </PriceDetail>
+              </Product>
             ))}
           </Info>
           <Summary>
@@ -194,11 +217,25 @@ const Cart = () => {
               <SummaryItemText>Estimated Shipping</SummaryItemText>
               <SummaryItemPrice>$5.90</SummaryItemPrice>
             </SummaryItem>
+            <SummaryItem>
+              <SummaryItemText>Discount coupon</SummaryItemText>
+              <SummaryItemPrice>-$5.90</SummaryItemPrice>
+            </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>${cart.total + 5.9}</SummaryItemPrice>
+              <SummaryItemPrice>${cart.total}</SummaryItemPrice>
             </SummaryItem>
-            <Button>CHECKOUT NOW</Button>
+            <StripeCheckout
+              name="mern shop"
+              billingAddress
+              shippingAddress
+              description={`Your total is $${cart.total}`}
+              amount={cart.total * 100} //tienen 2 ceros mas por los centavos
+              token={onToken}
+              stripeKey={STRIPE_KEY}
+            >
+              <Button>CHECKOUT NOW</Button>
+            </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>
