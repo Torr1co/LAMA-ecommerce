@@ -1,13 +1,14 @@
 import axios from "axios";
 
+const user = JSON.parse(localStorage.getItem("persist:root"))?.user;
+const currentUser = user && JSON.parse(user).currentUser;
+const TOKEN = currentUser?.accessToken;
+
 export const publicRequest = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
 });
 
 export const userRequest = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
-  header: {
-    token:
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNTM0MTQzM2FiM2QyYjU0Y2Q3ZGZjMSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0OTc3OTQxOCwiZXhwIjoxNjUwMDM4NjE4fQ.xOfZSnCOCPLDzEq9RlDztl9CZLXRMSau0qJCD0H4n5o",
-  },
+  headers: { token: `Bearer ${TOKEN}` },
 });

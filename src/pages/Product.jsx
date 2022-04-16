@@ -7,7 +7,7 @@ import Newsletter from "../components/Newsletter";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
 import { useLocation } from "react-router-dom";
-import { publicRequest, userRequest } from "../api/expressServer";
+import { publicRequest } from "../api/expressServer";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
 

@@ -103,11 +103,11 @@ const ProductPrice = styled.span`
   ${mobile({ marginBottom: "20px" })}
 `;
 
-const Hr = styled.hr`
+/* const Hr = styled.hr`
   background-color: darkGray;
   border: none;
   height: 1px;
-`;
+`; */
 const Summary = styled.div`
   flex: 1;
   border: 0.5px solid lightgray;
@@ -150,13 +150,13 @@ const Cart = () => {
         });
 
         console.log(res.data);
-        navigate("/success");
+        navigate("/success", { data: res.data, products: cart });
       } catch (err) {
         console.log(err);
       }
     };
     stripeToken && makeRequest();
-  }, [stripeToken, navigate, cart.total]);
+  }, [stripeToken, navigate, cart]);
 
   return (
     <Container>
