@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import StripeCheckout from "react-stripe-checkout";
 import { userRequest } from "../api/expressServer";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const STRIPE_KEY = process.env.REACT_APP_STRIPE_KEY;
 
@@ -165,7 +166,9 @@ const Cart = () => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+          <Link to="/products/man">
+            <TopButton>CONTINUE SHOPPING</TopButton>
+          </Link>
           <TopTexts>
             <TopText>Shopping Bag({cart.products.length})</TopText>
             <TopText>Your WishList (0)</TopText>

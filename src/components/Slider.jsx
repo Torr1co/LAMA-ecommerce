@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { sliderItems } from "../data";
 import { mobile } from "../responsive";
-
 const Container = styled.div`
   width: 100%;
   height: 80vh;
@@ -54,7 +53,7 @@ const ImgContainer = styled.div`
 `;
 
 const Image = styled.img`
-  height: 80%;
+  height: 100%;
 `;
 
 const InfoContainer = styled.div`
