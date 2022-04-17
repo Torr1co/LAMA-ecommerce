@@ -67,7 +67,6 @@ const ContactItem = styled.div`
   display: flex;
   align-items: center;
 `;
-const Payment = styled.img``;
 const Footer = () => {
   return (
     <Container>
