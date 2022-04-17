@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import { register } from "../redux/apiCalls";
+import { useDispatch, useSelector } from "react-redux";
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -35,8 +37,8 @@ const Input = styled.input`
   padding: 10px;
 `;
 const Agreement = styled.span`
-  font-size: 12px;
-  margin: 20px 0px;
+  font-size: 16px;
+  margin: 8px 0px;
 `;
 const Button = styled.button`
   width: 40%;
@@ -46,23 +48,55 @@ const Button = styled.button`
   color: white;
   cursor: pointer;
 `;
+
+const Error = styled.span`
+  color: red;
+  font-size: 16px;
+  margin-top: 8px;
+`;
 const Register = () => {
+  const [userData, setUserData] = useState({});
+  const { error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const handleChange = (e) => {
+    setUserData((state) => ({
+      ...state,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    register(dispatch, userData);
+  };
+
   return (
     <Container>
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
         <Form>
-          <Input placeholder="name" />
-          <Input placeholder="last name" />
-          <Input placeholder="nusernameame" />
-          <Input placeholder="email" />
-          <Input placeholder="password" />
-          <Input placeholder="confirm password" />
+          <Input
+            placeholder="username"
+            name="username"
+            onChange={handleChange}
+          />
+          <Input placeholder="email" name="email" onChange={handleChange} />
+          <Input
+            placeholder="password"
+            name="password"
+            onChange={handleChange}
+          />
+          <Input
+            placeholder="confirm password"
+            name="rePassword"
+            onChange={handleChange}
+          />
+          {error && <Error>Something went wrong</Error>}
           <Agreement>
             By creating an account, I consent to the processing of my persoinal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
-          <Button>CREATE</Button>
+          <Button onClick={handleSubmit}>CREATE</Button>
         </Form>
       </Wrapper>
     </Container>

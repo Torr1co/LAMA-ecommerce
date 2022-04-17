@@ -63,6 +63,7 @@ const MenuItem = styled.div`
 `;
 const NavBar = () => {
   const { quantity } = useSelector((state) => state.cart);
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <Container>
       <Wrapper>
@@ -77,12 +78,19 @@ const NavBar = () => {
           <Logo>TORRI</Logo>
         </Center>
         <Right>
-          <Link to="/register">
-            <MenuItem> REGISTER</MenuItem>
-          </Link>
-          <Link to="/login">
-            <MenuItem>SIGN IN</MenuItem>
-          </Link>
+          {currentUser ? (
+            <MenuItem>Welcome back {currentUser.username}!</MenuItem>
+          ) : (
+            <>
+              <Link to="/register">
+                <MenuItem> REGISTER</MenuItem>
+              </Link>
+              <Link to="/login">
+                <MenuItem>SIGN IN</MenuItem>
+              </Link>
+            </>
+          )}
+
           <Link to="/cart">
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">

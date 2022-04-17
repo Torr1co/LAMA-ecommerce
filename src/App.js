@@ -7,18 +7,23 @@ import Cart from "./pages/Cart";
 import Pay from "./pages/Pay";
 import Success from "./pages/Success";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const App = () => {
-  const user = true;
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="products/:id" element={<ProductList />} />
         <Route path="product/:id" element={<Product />} />
-        <Route path="register" element={<Register />} />
+        <Route
+          path="register"
+          element={currentUser ? <Navigate replace to="/" /> : <Register />}
+        />
         <Route
           path="login"
-          element={user ? <Navigate replace to="/" /> : <Login />}
+          element={currentUser ? <Navigate replace to="/" /> : <Login />}
         />
         <Route path="cart" element={<Cart />} />
         <Route path="pay" element={<Pay />} />
